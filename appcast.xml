@@ -5,5 +5,14 @@
     <link>https://github.com/ayushpratap27/Snipstow-releases</link>
     <description>Updates for Snipstow</description>
     <language>en</language>
+    <item>
+      <title>Snipstow 1.1.0</title>
+      <pubDate>Sat, 14 Nov 2026 17:26:02 +0000</pubDate>
+      <sparkle:version>2</sparkle:version>
+      <sparkle:shortVersionString>1.1.0</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p>Snipstow now updates itself: it checks once a day, or right-click the menu-bar icon and choose Check for Updates. The clip list is also taller and sized like a menu, with the preview attached beside it.</p>]]></description>
+      <enclosure url="https://github.com/ayushpratap27/Snipstow-releases/releases/download/v1.1.0/Snipstow-1.1.0.zip" sparkle:edSignature="fPb2XvIht3GOHXbtBdTplvHc9+Ktu7qByshDm496zl1N6zZ41DRSzdj89BMsoNpBWxYKjja2t2T9SFuFdk0gDQ==" length="2625507" type="application/octet-stream"/>
+    </item>
   </channel>
 </rss>
