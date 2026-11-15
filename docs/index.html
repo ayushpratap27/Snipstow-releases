@@ -112,8 +112,8 @@
   .button svg { width: 18px; height: 18px; }
   .quiet { color: var(--muted); text-decoration-thickness: 1px; text-underline-offset: 4px; }
   .fineprint { margin-top: 14px; font-size: 0.9rem; color: var(--muted); }
-  .dropdown { position: relative; margin-top: -72px; }
-  .dropdown img { border-radius: 0 0 14px 14px; box-shadow: var(--shot-shadow); }
+  .dropdown { position: relative; margin-top: -66px; }
+  .dropdown img { border-radius: 14px; box-shadow: var(--shot-shadow); }
   @media (prefers-reduced-motion: no-preference) {
     .dropdown { animation: drop 900ms cubic-bezier(.2, .8, .2, 1) 200ms backwards; }
     @keyframes drop {
@@ -192,7 +192,7 @@
   .demo { --app-bg: #ECECEE; --app-ink: #1D1D1F; --app-muted: #6E6E73; --app-soft: rgba(0,0,0,.06);
     --app-line: rgba(0,0,0,.09); --app-sel: #2F7BF5; --app-pill: rgba(47,123,245,.16); --app-pill-ink: #1A56C9;
     position: relative; width: 450px; height: 640px; display: flex; flex-direction: column;
-    background: var(--app-bg); color: var(--app-ink); border-radius: 0 0 14px 14px; box-shadow: var(--shot-shadow);
+    background: var(--app-bg); color: var(--app-ink); border-radius: 14px; box-shadow: var(--shot-shadow);
     font: 13px/1.35 -apple-system, BlinkMacSystemFont, "SF Pro Text", var(--body); text-align: left; }
   @media (prefers-color-scheme: dark) {
     .demo { --app-bg: #2C2C2E; --app-ink: #F2F2F7; --app-muted: #98989D; --app-soft: rgba(255,255,255,.08);
@@ -211,7 +211,7 @@
   .demo-row { display: flex; align-items: center; gap: 8px; height: 26px; padding: 0 8px; border-radius: 6px; cursor: default; }
   .demo-row.img { height: 48px; }
   .demo-row[aria-selected="true"] { background: var(--app-sel); color: #fff; }
-  .demo-row[aria-selected="true"] .meta, .demo-row[aria-selected="true"] .badge { color: rgba(255,255,255,.8); }
+  .demo-row[aria-selected="true"] .meta, .demo-row[aria-selected="true"] .badge, .demo-row.img[aria-selected="true"] .label { color: rgba(255,255,255,.85); }
   .demo-row[aria-selected="true"] .kind { background: rgba(255,255,255,.2); color: #fff; }
   .demo-row .kind { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 4px; background: var(--app-soft); color: var(--app-muted); }
   .demo-row .kind svg { width: 11px; height: 11px; }
@@ -228,13 +228,14 @@
   .demo-foot b { color: var(--app-ink); font-weight: 600; }
   .demo-foot .count { margin-left: auto; }
   .demo-preview { position: absolute; top: 0; right: 100%; width: 400px; height: 100%; display: flex; flex-direction: column;
-    background: var(--app-bg); color: var(--app-ink); border-radius: 0 0 0 14px; border-right: 1px solid var(--app-line);
+    background: var(--app-bg); color: var(--app-ink); border-radius: 14px 0 0 14px; border-right: 1px solid var(--app-line);
     box-shadow: var(--shot-shadow); opacity: 0; pointer-events: none; transform: translateX(16px); transition: opacity .2s, transform .24s cubic-bezier(.2,.8,.2,1); }
   .demo-preview.open { opacity: 1; pointer-events: auto; transform: none; }
-  .demo.with-preview { border-bottom-left-radius: 0; }
+  .demo.with-preview { border-top-left-radius: 0; border-bottom-left-radius: 0; }
   .demo-preview .head { display: flex; align-items: center; gap: 8px; padding: 12px 14px; border-bottom: 1px solid var(--app-line); font-weight: 600; }
   .demo-preview .head .acts { margin-left: auto; display: flex; gap: 10px; color: var(--app-muted); }
   .demo-preview .body { flex: 1; overflow: auto; padding: 16px; }
+  .demo-preview .body svg { width: 100%; height: auto; display: block; }
   .demo-preview .body p { margin: 0; font-size: 14px; }
   .demo-preview pre { margin: 0; font: 12.5px/1.5 ui-monospace, "SF Mono", Menlo, monospace; white-space: pre-wrap; }
   .demo-preview pre .k { color: #C2368A; } .demo-preview pre .s { color: #2E8B3D; } .demo-preview pre .c { color: var(--app-muted); }
