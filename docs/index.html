@@ -1,0 +1,384 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Snipstow: clipboard history for your Mac</title>
+<meta name="description" content="Snipstow keeps everything you copy in your Mac's menu bar: text, links, images, files and colours, searchable and one keystroke away. Free, and it stays on your Mac.">
+<meta property="og:title" content="Snipstow: clipboard history for your Mac">
+<meta property="og:description" content="Everything you copy, stowed in your menu bar. Free, and it stays on your Mac.">
+<meta property="og:image" content="img/preview-image-light.png">
+<link rel="icon" href="img/favicon.png">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Bricolage+Grotesque:opsz,wght@12..96,500..800&family=IBM+Plex+Sans:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+  :root {
+    --fog: #EEF1F6;
+    --paper: #FFFFFF;
+    --ink: #1B2232;
+    --muted: #586277;
+    --line: #D8DEE8;
+    --indigo: #4F45E6;
+    --teal: #12B5BF;
+    --bar: rgba(255, 255, 255, 0.72);
+    --shot-shadow: 0 30px 60px -20px rgba(27, 34, 50, 0.35), 0 0 0 1px rgba(27, 34, 50, 0.08);
+    --display: "Bricolage Grotesque", ui-sans-serif, system-ui, sans-serif;
+    --body: "IBM Plex Sans", ui-sans-serif, system-ui, sans-serif;
+  }
+  @media (prefers-color-scheme: dark) {
+    :root {
+      --fog: #141A26;
+      --paper: #1C2433;
+      --ink: #E9EDF4;
+      --muted: #A3ADBF;
+      --line: #2E384A;
+      --indigo: #8B84FF;
+      --teal: #3CCFD8;
+      --bar: rgba(28, 36, 51, 0.72);
+      --shot-shadow: 0 30px 60px -20px rgba(0, 0, 0, 0.6), 0 0 0 1px rgba(255, 255, 255, 0.08);
+    }
+  }
+
+  * { box-sizing: border-box; }
+  html { scroll-behavior: smooth; }
+  body {
+    margin: 0;
+    background: var(--fog);
+    color: var(--ink);
+    font: 400 1.0625rem/1.6 var(--body);
+    -webkit-font-smoothing: antialiased;
+  }
+  img { display: block; max-width: 100%; height: auto; }
+  a { color: inherit; }
+  :focus-visible { outline: 3px solid var(--teal); outline-offset: 3px; border-radius: 6px; }
+  h1, h2, h3 { font-family: var(--display); line-height: 1.05; letter-spacing: -0.02em; margin: 0; }
+  p { margin: 0; }
+  .wrap { width: min(1120px, 100% - 32px); margin-inline: auto; }
+
+  /* The page opens on a Mac menu bar: Snipstow's home. */
+  .menubar {
+    position: sticky; top: 0; z-index: 10;
+    height: 40px;
+    background: var(--bar);
+    backdrop-filter: saturate(1.6) blur(18px);
+    -webkit-backdrop-filter: saturate(1.6) blur(18px);
+    border-bottom: 1px solid var(--line);
+    font-size: 0.9rem;
+  }
+  .menubar .wrap { height: 100%; display: flex; align-items: center; gap: 22px; }
+  .brand { display: flex; align-items: center; gap: 8px; font-family: var(--display); font-weight: 700; font-size: 1.05rem; text-decoration: none; }
+  .brand img { width: 22px; height: 22px; }
+  .menubar nav { display: flex; gap: 18px; }
+  .menubar nav a { text-decoration: none; color: var(--muted); }
+  .menubar nav a:hover { color: var(--ink); }
+  .tray { margin-left: auto; display: flex; align-items: center; gap: 14px; color: var(--muted); }
+  .tray svg { width: 17px; height: 17px; }
+  .tray .stow {
+    display: grid; place-items: center;
+    width: 30px; height: 26px; border-radius: 6px;
+    background: var(--indigo); color: #fff;
+  }
+  .tray time { font-variant-numeric: tabular-nums; }
+  /* On wide screens the icon sits right above the hanging list (450 wide, flush right). */
+  @media (min-width: 901px) {
+    .menubar .wrap { position: relative; }
+    .tray .stow { position: absolute; right: 210px; top: 7px; }
+  }
+
+  /* Hero: the list hangs from the menu-bar icon, over a desktop. */
+  .hero {
+    position: relative;
+    overflow: hidden;
+    padding: 72px 0 0;
+    background:
+      radial-gradient(1100px 520px at 88% -10%, color-mix(in srgb, var(--indigo) 38%, transparent), transparent 70%),
+      radial-gradient(800px 480px at 100% 70%, color-mix(in srgb, var(--teal) 30%, transparent), transparent 70%),
+      var(--fog);
+  }
+  .hero .wrap { display: grid; grid-template-columns: 1fr 450px; gap: 56px; align-items: start; }
+  .hero h1 { font-size: clamp(2.6rem, 6vw, 4.6rem); font-weight: 800; max-width: 11ch; }
+  .lede { margin-top: 22px; font-size: 1.2rem; color: var(--muted); max-width: 34ch; }
+  .actions { margin-top: 32px; display: flex; flex-wrap: wrap; gap: 14px; align-items: center; }
+  .button {
+    display: inline-flex; align-items: center; gap: 10px;
+    padding: 14px 22px; border-radius: 12px;
+    font: 600 1rem/1 var(--body); text-decoration: none;
+    background: var(--indigo); color: #fff;
+  }
+  .button:hover { filter: brightness(1.08); }
+  .button svg { width: 18px; height: 18px; }
+  .quiet { color: var(--muted); text-decoration-thickness: 1px; text-underline-offset: 4px; }
+  .fineprint { margin-top: 14px; font-size: 0.9rem; color: var(--muted); }
+  .dropdown { position: relative; margin-top: -72px; }
+  .dropdown img { border-radius: 0 0 14px 14px; box-shadow: var(--shot-shadow); }
+  @media (prefers-reduced-motion: no-preference) {
+    .dropdown { animation: drop 900ms cubic-bezier(.2, .8, .2, 1) 200ms both; }
+    @keyframes drop {
+      from { clip-path: inset(0 0 100% 0); transform: translateY(-8px); }
+      to { clip-path: inset(0 0 -60px 0); transform: none; }
+    }
+  }
+
+  /* Features: text beside real screenshots, alternating sides. */
+  section { padding: 120px 0 0; }
+  .feature { display: grid; grid-template-columns: 5fr 7fr; gap: 64px; align-items: center; }
+  .feature.flip { grid-template-columns: 7fr 5fr; }
+  .feature.flip .copy { order: 2; }
+  .feature h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; max-width: 14ch; }
+  .feature .copy p { margin-top: 18px; color: var(--muted); max-width: 46ch; }
+  .feature ul { margin: 22px 0 0; padding: 0; list-style: none; display: grid; gap: 10px; max-width: 46ch; }
+  .feature li { padding-left: 26px; position: relative; }
+  .feature li::before {
+    content: ""; position: absolute; left: 0; top: 0.55em;
+    width: 12px; height: 8px; border-radius: 2px;
+    background: var(--teal); box-shadow: 0 -4px 0 -1px var(--indigo);
+  }
+  .shot img { border-radius: 14px; box-shadow: var(--shot-shadow); margin-inline: auto; }
+
+  /* Keyboard: real keycaps. */
+  .keys { margin: 36px 0 0; display: grid; grid-template-columns: repeat(auto-fit, minmax(320px, 1fr)); gap: 4px 48px; }
+  .keys div { display: flex; align-items: center; gap: 14px; padding: 10px 0; border-bottom: 1px solid var(--line); }
+  .keys dd { margin: 0; color: var(--muted); }
+  .keys dt { display: flex; gap: 6px; flex: none; min-width: 108px; }
+  kbd {
+    display: inline-grid; place-items: center;
+    min-width: 34px; height: 34px; padding: 0 8px;
+    font: 500 0.95rem/1 var(--body);
+    color: var(--ink); background: var(--paper);
+    border: 1px solid var(--line); border-bottom-width: 3px; border-radius: 8px;
+  }
+
+  /* Install: a real sequence, so it is numbered. */
+  .steps { margin: 40px 0 0; padding: 0; list-style: none; counter-reset: step; display: grid; grid-template-columns: repeat(3, 1fr); gap: 28px; }
+  .steps li { counter-increment: step; padding-top: 18px; border-top: 3px solid var(--indigo); }
+  .steps li::before { content: counter(step); font: 800 2.4rem/1 var(--display); color: var(--indigo); }
+  .steps h3 { margin-top: 12px; font-size: 1.3rem; font-weight: 700; }
+  .steps p { margin-top: 8px; color: var(--muted); }
+
+  .faq details { max-width: 760px; }
+  .faq h2, .install h2, .keyboard h2 { font-size: clamp(2rem, 4vw, 3rem); font-weight: 700; }
+  details { border-bottom: 1px solid var(--line); padding: 18px 0; }
+  details:first-of-type { margin-top: 28px; border-top: 1px solid var(--line); }
+  summary { cursor: pointer; font-weight: 600; font-size: 1.1rem; list-style: none; display: flex; justify-content: space-between; gap: 16px; }
+  summary::-webkit-details-marker { display: none; }
+  summary::after { content: "+"; font-family: var(--display); color: var(--indigo); font-size: 1.4rem; line-height: 1; }
+  details[open] summary::after { content: "−"; }
+  details p { margin-top: 10px; color: var(--muted); max-width: 64ch; }
+
+  .closing { padding: 120px 0 96px; }
+  .closing .wrap { display: flex; flex-wrap: wrap; gap: 28px; align-items: center; justify-content: space-between; border-top: 1px solid var(--line); padding-top: 56px; }
+  .closing h2 { font-size: clamp(1.8rem, 3.4vw, 2.6rem); font-weight: 700; max-width: 18ch; }
+  footer { padding: 0 0 48px; color: var(--muted); font-size: 0.9rem; }
+  footer .wrap { display: flex; flex-wrap: wrap; gap: 8px 24px; }
+
+  @media (max-width: 900px) {
+    .hero .wrap, .feature, .feature.flip { grid-template-columns: 1fr; gap: 40px; }
+    .feature.flip .copy { order: 0; }
+    .dropdown { margin-top: 0; max-width: 450px; }
+    .dropdown img { border-radius: 14px; }
+    .steps { grid-template-columns: 1fr; }
+    section { padding-top: 88px; }
+  }
+  @media (max-width: 560px) {
+    .menubar nav, .tray .sys { display: none; }
+    .hero { padding-top: 48px; }
+  }
+</style>
+</head>
+<body>
+
+<header class="menubar">
+  <div class="wrap">
+    <a class="brand" href="#top"><img src="img/icon.png" alt="" width="22" height="22">Snipstow</a>
+    <nav aria-label="Sections">
+      <a href="#features">Features</a>
+      <a href="#install">Install</a>
+      <a href="#faq">Questions</a>
+    </nav>
+    <div class="tray" aria-hidden="true">
+      <svg class="sys" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/></svg>
+      <svg class="sys" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="21" height="12" rx="3"/><rect x="5" y="9" width="13" height="6" rx="1" fill="currentColor" stroke="none"/><path d="M25 10v4" stroke-linecap="round"/></svg>
+      <span class="stow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 3 7.5 12 12l9-4.5L12 3Z"/><path d="m3 12 9 4.5 9-4.5"/><path d="m3 16.5 9 4.5 9-4.5"/></svg></span>
+      <time class="sys" id="clock">9:41</time>
+    </div>
+  </div>
+</header>
+
+<main id="top">
+  <div class="hero">
+    <div class="wrap">
+      <div>
+        <h1>Everything you copy, stowed in your menu bar.</h1>
+        <p class="lede">Snipstow keeps a searchable history of what you copy: text, links, images, files and colours, one click or keystroke away.</p>
+        <div class="actions">
+          <a class="button" href="https://github.com/ayushpratap27/Snipstow-releases/releases/latest/download/Snipstow.dmg">
+            <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
+            Download for Mac
+          </a>
+          <a class="quiet" href="#install">How to install</a>
+        </div>
+        <p class="fineprint">Free. For Macs with Apple silicon on macOS 14 Sonoma or later.</p>
+      </div>
+      <figure class="dropdown" style="margin-inline:0">
+        <picture>
+          <source srcset="img/list-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="img/list-light.png" width="450" height="640" alt="Snipstow's clip list open under its menu-bar icon, showing recent clips: messages, a colour, a code snippet, an image and files.">
+        </picture>
+      </figure>
+    </div>
+  </div>
+
+  <section id="features">
+    <div class="wrap feature">
+      <div class="copy">
+        <h2>See the whole clip before you paste it.</h2>
+        <p>Rest the pointer on a clip and its full contents open beside the list: the picture, the complete text or the files, with where it came from and when.</p>
+        <ul>
+          <li>Click to copy, press Return to paste straight into the app you're in.</li>
+          <li>Paste as plain text when you don't want the formatting.</li>
+          <li>Edit text or crop and rotate an image before you use it.</li>
+        </ul>
+      </div>
+      <figure class="shot" style="margin:0">
+        <picture>
+          <source srcset="img/preview-image-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="img/preview-image-light.png" width="850" height="640" alt="The preview open beside the clip list, showing a copied landscape image with its source app, size and copy times.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap feature flip">
+      <div class="copy">
+        <h2>Keep the clips you reuse.</h2>
+        <p>Pin snippets you paste every day, or make Smart Lists that gather clips for you: everything copied from Xcode, every link, anything from this week.</p>
+        <ul>
+          <li>Give a clip a title, like "Office address", and search finds it by name.</li>
+          <li>Line up several clips and paste them one after another.</li>
+          <li>Code is highlighted so you can tell your snippets apart at a glance.</li>
+        </ul>
+      </div>
+      <figure class="shot" style="margin:0">
+        <picture>
+          <source srcset="img/preview-code-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="img/preview-code-light.png" width="850" height="640" alt="A Swift code snippet previewed beside the list, with a From Xcode smart list among the tabs.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="keyboard" id="keyboard">
+    <div class="wrap">
+      <h2>Never leave the keyboard.</h2>
+      <dl class="keys">
+        <div><dt><kbd>⇧</kbd><kbd>⌘</kbd><kbd>V</kbd></dt><dd>Open your clips from anywhere</dd></div>
+        <div><dt><kbd>↩</kbd></dt><dd>Paste the selected clip</dd></div>
+        <div><dt><kbd>⇧</kbd><kbd>↩</kbd></dt><dd>Paste it as plain text</dd></div>
+        <div><dt><kbd>⌘</kbd><kbd>1</kbd></dt><dd>Paste one of the first nine clips, 1 to 9</dd></div>
+        <div><dt><kbd>Space</kbd></dt><dd>Preview the selected clip</dd></div>
+        <div><dt><kbd>⌘</kbd><kbd>P</kbd></dt><dd>Pin it for later</dd></div>
+        <div><dt><kbd>⇥</kbd></dt><dd>Switch between your lists</dd></div>
+        <div><dt><kbd>Esc</kbd></dt><dd>Close and get back to work</dd></div>
+      </dl>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap feature">
+      <div class="copy">
+        <h2>Your history stays on your Mac.</h2>
+        <p>There's no account and nothing is uploaded. Snipstow only goes online to check for its own updates.</p>
+        <ul>
+          <li>Passwords copied from 1Password, Bitwarden and other password managers are never saved.</li>
+          <li>Ignore any app, or skip one-time codes, card numbers and API keys automatically.</li>
+          <li>Pause saving for a while, or skip just the next copy.</li>
+        </ul>
+      </div>
+      <figure class="shot" style="margin:0">
+        <picture>
+          <source srcset="img/settings-dark.png" media="(prefers-color-scheme: dark)">
+          <img src="img/settings-light.png" width="600" height="640" alt="Snipstow's settings window with keyboard shortcuts, open at login and appearance options.">
+        </picture>
+      </figure>
+    </div>
+  </section>
+
+  <section class="install" id="install">
+    <div class="wrap">
+      <h2>Install in a minute.</h2>
+      <ol class="steps">
+        <li>
+          <h3>Drag it into Applications</h3>
+          <p>Open the downloaded file and drag Snipstow onto the Applications folder.</p>
+        </li>
+        <li>
+          <h3>Allow it to open</h3>
+          <p>Snipstow isn't from the App Store, so macOS asks the first time. Click Done, then open System Settings, Privacy &amp; Security, and click Open Anyway.</p>
+        </li>
+        <li>
+          <h3>Let it paste for you</h3>
+          <p>When you first pick a clip, turn on Snipstow under Accessibility. Then Return pastes straight into the app you're using.</p>
+        </li>
+      </ol>
+    </div>
+  </section>
+
+  <section id="faq">
+    <div class="wrap faq">
+      <h2>Questions</h2>
+      <details>
+        <summary>Is Snipstow free?</summary>
+        <p>Yes, completely: no trial, no subscription and no account.</p>
+      </details>
+      <details>
+        <summary>Why does macOS say it can't verify Snipstow?</summary>
+        <p>Apps from outside the App Store need a paid Apple review step to skip that message. Snipstow is shared without it, so macOS asks you to confirm once under Privacy &amp; Security. After that it opens normally, and updates don't ask again.</p>
+      </details>
+      <details>
+        <summary>How do updates work?</summary>
+        <p>Snipstow checks once a day and shows a small notice when a new version is ready. Install it with one click, or right-click the menu-bar icon and choose Check for Updates. Every update is signed, and Snipstow only installs updates signed by its developer.</p>
+      </details>
+      <details>
+        <summary>Does it work on Intel Macs?</summary>
+        <p>No. Snipstow needs a Mac with Apple silicon (M1 or later) and macOS 14 Sonoma or later.</p>
+      </details>
+      <details>
+        <summary>Where is my history kept, and how do I clear it?</summary>
+        <p>In a single file in your user Library, readable only by your account. Clear it any time from the trash button in the list or in Settings, choose how long to keep history, or export and import it.</p>
+      </details>
+      <details>
+        <summary>Can I use it with the Shortcuts app?</summary>
+        <p>Yes. Snipstow adds actions to pause and resume saving, copy a clip, and get your recent clips as text.</p>
+      </details>
+    </div>
+  </section>
+
+  <section class="closing">
+    <div class="wrap">
+      <h2>Stop copying the same thing twice.</h2>
+      <a class="button" href="https://github.com/ayushpratap27/Snipstow-releases/releases/latest/download/Snipstow.dmg">
+        <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round"><path d="M12 4v11m0 0-4.5-4.5M12 15l4.5-4.5M5 20h14"/></svg>
+        Download for Mac
+      </a>
+    </div>
+  </section>
+</main>
+
+<footer>
+  <div class="wrap">
+    <span>Snipstow for macOS</span>
+    <a href="https://github.com/ayushpratap27/Snipstow-releases/releases">All releases</a>
+  </div>
+</footer>
+
+<script>
+  // The menu-bar clock shows the visitor's own time.
+  const clock = document.getElementById("clock");
+  const tick = () => { clock.textContent = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }); };
+  tick();
+  setInterval(tick, 30000);
+</script>
+</body>
+</html>
