@@ -199,10 +199,13 @@
       --app-line: rgba(255,255,255,.09); --app-pill: rgba(90,140,255,.22); --app-pill-ink: #A9C4FF; }
   }
   .demo svg { width: 15px; height: 15px; flex: none; }
+  .sf { display: inline-block; width: 15px; height: 15px; flex: none; background-color: currentColor;
+    -webkit-mask: var(--sf) center / contain no-repeat; mask: var(--sf) center / contain no-repeat; }
   .demo-top { display: flex; align-items: center; gap: 8px; padding: 12px 14px 8px; color: var(--app-muted); }
   .demo-top input { flex: 1; min-width: 0; border: 0; background: none; font: inherit; font-size: 17px; color: var(--app-ink); outline: none; }
   .demo-top input::placeholder { color: var(--app-muted); opacity: .7; }
-  .demo-icons { display: flex; gap: 10px; }
+  .demo-icons { display: flex; align-items: center; gap: 8px; color: var(--app-ink); }
+  .demo-icons .filter { display: inline-flex; align-items: center; gap: 3px; margin-right: 6px; }
   .demo-tabs { display: flex; gap: 4px; padding: 0 8px 9px; border-bottom: 1px solid var(--app-line); overflow: hidden; }
   .demo-tabs button { display: inline-flex; align-items: center; gap: 4px; border: 0; border-radius: 99px; padding: 4px 8px; font-size: 12px;
     background: var(--app-soft); color: var(--app-muted); font: inherit; cursor: pointer; white-space: nowrap; }
@@ -215,6 +218,7 @@
   .demo-row[aria-selected="true"] .kind { background: rgba(255,255,255,.2); color: #fff; }
   .demo-row .kind { display: grid; place-items: center; width: 18px; height: 18px; border-radius: 4px; background: var(--app-soft); color: var(--app-muted); }
   .demo-row .kind svg { width: 11px; height: 11px; }
+  .demo-row .kind .sf { transform: scale(.62); }
   .demo-row .swatch { width: 18px; height: 18px; border-radius: 4px; }
   .demo-row .thumb { width: 72px; height: 40px; border-radius: 4px; overflow: hidden; flex: none; }
   .demo-row .thumb svg { width: 100%; height: 100%; }
@@ -269,7 +273,7 @@
     <div class="tray" aria-hidden="true">
       <svg class="sys" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round"><path d="M2 9a15 15 0 0 1 20 0M5.5 12.5a10 10 0 0 1 13 0M9 16a5 5 0 0 1 6 0"/><circle cx="12" cy="19.5" r="1" fill="currentColor"/></svg>
       <svg class="sys" viewBox="0 0 28 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="6" width="21" height="12" rx="3"/><rect x="5" y="9" width="13" height="6" rx="1" fill="currentColor" stroke="none"/><path d="M25 10v4" stroke-linecap="round"/></svg>
-      <span class="stow"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linejoin="round"><path d="M12 3 3 7.5 12 12l9-4.5L12 3Z"/><path d="m3 12 9 4.5 9-4.5"/><path d="m3 16.5 9 4.5 9-4.5"/></svg></span>
+      <span class="stow"><i class="sf" style="--sf:url(img/sf/stow.png);width:17px;height:17px"></i></span>
       <time class="sys" id="clock">9:41</time>
     </div>
   </div>
@@ -461,21 +465,17 @@
 
   // ---- Interactive clip list (sample clips; nothing is sent anywhere) ----
   const fine = window.matchMedia("(hover: hover) and (pointer: fine) and (min-width: 901px)");
-  const icon = {
-    text: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M3 4h10M3 8h10M3 12h6"/></svg>',
-    link: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M7 9a3 3 0 0 0 4.2 0l2-2a3 3 0 0 0-4.2-4.2l-.6.6M9 7a3 3 0 0 0-4.2 0l-2 2a3 3 0 0 0 4.2 4.2l.6-.6"/></svg>',
-    file: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M4 1.5h5.5L13 5v9.5H4z"/><path d="M9.5 1.5V5H13"/></svg>',
-    image: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><rect x="1.5" y="3" width="13" height="10" rx="1.5"/><path d="m2 12 4-4 3 3 2-2 3 3"/></svg>',
-    color: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6"><circle cx="8" cy="8" r="6"/></svg>',
-    search: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="7" cy="7" r="4.8"/><path d="m10.6 10.6 3.4 3.4"/></svg>',
-    clock: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><circle cx="8" cy="8" r="6"/><path d="M8 4.5V8l2.3 1.5"/></svg>',
-    pin: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round"><path d="M5.5 2h5l-.8 4 2.3 2.5H4L6.3 6zM8 8.5V14"/></svg>',
-    folder: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linejoin="round"><path d="M1.5 4h4.5l1.5 1.5h7v8h-13z"/></svg>',
-    trash: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linecap="round"><path d="M3 4.5h10M6.5 4.5V3h3v1.5M4.5 4.5l.6 9h5.8l.6-9"/></svg>',
-    gear: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5"><circle cx="8" cy="8" r="2.2"/><path d="M8 1.8v2M8 12.2v2M1.8 8h2M12.2 8h2M3.6 3.6l1.4 1.4M11 11l1.4 1.4M3.6 12.4 5 11M11 5l1.4-1.4"/></svg>',
-    power: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.6" stroke-linecap="round"><path d="M8 2v6M4.8 4.2a5 5 0 1 0 6.4 0"/></svg>',
-    copy: '<svg viewBox="0 0 16 16" fill="none" stroke="currentColor" stroke-width="1.5" stroke-linejoin="round"><rect x="5" y="5" width="8.5" height="9" rx="1.5"/><path d="M3 11V3.5A1.5 1.5 0 0 1 4.5 2H10"/></svg>',
+  // The app's own icons (SF Symbols, rendered from the app at 4x), drawn in the text colour.
+  // Natural size of each symbol at the app's 13 pt, so every icon keeps the app's proportions.
+  const dims = { text: [16, 13], link: [17, 17], file: [14, 16], image: [18, 14], color: [18, 15], search: [16, 15],
+    clock: [15, 15], pin: [15, 17], app: [16, 16], trash: [15, 17], gear: [16, 16], power: [15, 16], copy: [16, 18],
+    filter: [15, 15], chev: [15, 9] };
+  const sf = (name, pt = 13) => {
+    const [w, h] = dims[name];
+    return `<i class="sf" style="--sf:url(img/sf/${name}.png);width:${(w * pt / 13).toFixed(1)}px;height:${(h * pt / 13).toFixed(1)}px"></i>`;
   };
+  const icon = Object.fromEntries(Object.keys(dims).map((n) => [n, sf(n)]));
+  const tabIcon = (n) => sf(n, 11);
   const landscape = (id) => `<svg viewBox="0 0 120 80" preserveAspectRatio="xMidYMid slice"><defs><linearGradient id="${id}" x1="0" y1="1" x2="0" y2="0"><stop offset="0" stop-color="#FACD9E"/><stop offset="1" stop-color="#6B8CED"/></linearGradient></defs><rect width="120" height="80" fill="url(#${id})"/><circle cx="86" cy="34" r="9" fill="#FFEDB3"/><path d="M0 47C30 28 52 62 120 46V80H0z" fill="#4F45B3"/><path d="M0 59C40 44 70 70 120 58V80H0z" fill="#128C9E"/><path d="M0 69C30 62 60 74 120 66V80H0z" fill="#1A2945"/></svg>`;
   const code = 'func greeting(for name: String) -> String {\n    let hour = Calendar.current.component(.hour, from: .now)\n    return hour < 12 ? "Good morning, \\(name)" : "Hello, \\(name)"\n}';
   const codeHTML = code.replace(/&/g, "&amp;").replace(/</g, "&lt;")
@@ -494,11 +494,11 @@
     { kind: "text", label: "42 Harbour Lane, Brighton BN1 2AB", app: "Notes", age: "4h ago", size: "34 bytes", lists: ["pinned"] },
   ];
   const tabs = [
-    { id: "all", name: "History", icon: icon.clock, test: () => true },
-    { id: "pinned", name: "Pinned", icon: icon.pin, test: (c) => (c.lists || []).includes("pinned") },
-    { id: "links", name: "Links", icon: icon.link, test: (c) => c.kind === "link" },
-    { id: "images", name: "Images", icon: icon.image, test: (c) => c.kind === "image" },
-    { id: "xcode", name: "From Xcode", icon: icon.folder, test: (c) => c.app === "Xcode" },
+    { id: "all", name: "History", icon: tabIcon("clock"), test: () => true },
+    { id: "pinned", name: "Pinned", icon: tabIcon("pin"), test: (c) => (c.lists || []).includes("pinned") },
+    { id: "links", name: "Links", icon: tabIcon("link"), test: (c) => c.kind === "link" },
+    { id: "images", name: "Images", icon: tabIcon("image"), test: (c) => c.kind === "image" },
+    { id: "xcode", name: "From Xcode", icon: tabIcon("app"), test: (c) => c.app === "Xcode" },
   ];
 
   function startDemo() {
@@ -507,7 +507,7 @@
     demo.dataset.ready = "1";
     demo.innerHTML = `
       <div class="demo-top">${icon.search}<input id="demo-search" type="text" placeholder="Search clips" aria-label="Search the sample clips" aria-controls="demo-list" autocomplete="off" spellcheck="false">
-        <span class="demo-icons" aria-hidden="true">${icon.trash}${icon.pin}${icon.gear}${icon.power}</span></div>
+        <span class="demo-icons" aria-hidden="true"><span class="filter">${icon.filter}${sf("chev", 9)}</span>${icon.trash}${icon.pin}${icon.gear}${icon.power}</span></div>
       <div class="demo-tabs" role="group" aria-label="Lists">${tabs.map((t, i) => `<button type="button" data-tab="${t.id}" aria-pressed="${i === 0}">${t.icon}${t.name}</button>`).join("")}</div>
       <ul class="demo-list" id="demo-list" role="listbox" aria-label="Sample clips"></ul>
       <div class="demo-foot"><span><b>↩</b> Copy</span><span>Hover to preview</span><span class="count" id="demo-count"></span></div>
