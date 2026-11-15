@@ -6,6 +6,15 @@
     <description>Updates for Snipstow</description>
     <language>en</language>
     <item>
+      <title>Snipstow 1.1.1</title>
+      <pubDate>Sun, 15 Nov 2026 06:38:47 +0000</pubDate>
+      <sparkle:version>3</sparkle:version>
+      <sparkle:shortVersionString>1.1.1</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p>The menu-bar icon is now solid white, matching other menu-bar icons.</p>]]></description>
+      <enclosure url="https://github.com/ayushpratap27/Snipstow-releases/releases/download/v1.1.1/Snipstow-1.1.1.zip" sparkle:edSignature="5PjCt7FjlXc8UhgDgvfjEorOigsKmt18h79TZvFnaexZAqhYuBDsJ8HbxgldAR77n3PURjGkgcIu7eSPkGYyDg==" length="2629054" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Snipstow 1.1.0</title>
       <pubDate>Sat, 14 Nov 2026 17:26:02 +0000</pubDate>
       <sparkle:version>2</sparkle:version>
