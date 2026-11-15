@@ -3,6 +3,8 @@
 Clipboard history for your Mac, in the menu bar. Everything stays on your
 Mac: no account, no subscription.
 
+**Website:** [https://ayushpratap27.github.io/Snipstow-releases/](https://ayushpratap27.github.io/Snipstow-releases/)
+
 ## Download
 
 Get the latest **Snipstow-x.y.z.dmg** from
