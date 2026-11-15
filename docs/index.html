@@ -115,7 +115,7 @@
   .dropdown { position: relative; margin-top: -72px; }
   .dropdown img { border-radius: 0 0 14px 14px; box-shadow: var(--shot-shadow); }
   @media (prefers-reduced-motion: no-preference) {
-    .dropdown { animation: drop 900ms cubic-bezier(.2, .8, .2, 1) 200ms both; }
+    .dropdown { animation: drop 900ms cubic-bezier(.2, .8, .2, 1) 200ms backwards; }
     @keyframes drop {
       from { clip-path: inset(0 0 100% 0); transform: translateY(-8px); }
       /* Ends unclipped on the sides and bottom so the shadow shows in full. */
@@ -203,8 +203,8 @@
   .demo-top input { flex: 1; min-width: 0; border: 0; background: none; font: inherit; font-size: 17px; color: var(--app-ink); outline: none; }
   .demo-top input::placeholder { color: var(--app-muted); opacity: .7; }
   .demo-icons { display: flex; gap: 10px; }
-  .demo-tabs { display: flex; gap: 5px; padding: 0 10px 9px; border-bottom: 1px solid var(--app-line); overflow: hidden; }
-  .demo-tabs button { display: inline-flex; align-items: center; gap: 5px; border: 0; border-radius: 99px; padding: 4px 10px;
+  .demo-tabs { display: flex; gap: 4px; padding: 0 8px 9px; border-bottom: 1px solid var(--app-line); overflow: hidden; }
+  .demo-tabs button { display: inline-flex; align-items: center; gap: 4px; border: 0; border-radius: 99px; padding: 4px 8px; font-size: 12px;
     background: var(--app-soft); color: var(--app-muted); font: inherit; cursor: pointer; white-space: nowrap; }
   .demo-tabs button[aria-pressed="true"] { background: var(--app-pill); color: var(--app-pill-ink); }
   .demo-list { flex: 1; overflow-y: auto; padding: 5px 6px; margin: 0; list-style: none; }
