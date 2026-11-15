@@ -6,6 +6,15 @@
     <description>Updates for Snipstow</description>
     <language>en</language>
     <item>
+      <title>Snipstow 1.1.2</title>
+      <pubDate>Sun, 15 Nov 2026 11:01:35 +0000</pubDate>
+      <sparkle:version>4</sparkle:version>
+      <sparkle:shortVersionString>1.1.2</sparkle:shortVersionString>
+      <sparkle:minimumSystemVersion>14.0</sparkle:minimumSystemVersion>
+      <description><![CDATA[<p>Rich text previews are readable in dark mode.</p>]]></description>
+      <enclosure url="https://github.com/ayushpratap27/Snipstow-releases/releases/download/v1.1.2/Snipstow-1.1.2.zip" sparkle:edSignature="mund0qkTn3lRlWO0yJeWVHbgP3o4HkjvfoCHDGIKNwMfnISqoIM/+UQn5AUkC3rQeyjyBDJXXMOjyIb3qZDsDg==" length="2632268" type="application/octet-stream"/>
+    </item>
+    <item>
       <title>Snipstow 1.1.1</title>
       <pubDate>Sun, 15 Nov 2026 06:38:47 +0000</pubDate>
       <sparkle:version>3</sparkle:version>
