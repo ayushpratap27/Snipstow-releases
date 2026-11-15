@@ -374,11 +374,18 @@
 </footer>
 
 <script>
-  // The menu-bar clock shows the visitor's own time.
+  // The menu-bar clock shows the visitor's own time, changing exactly on the
+  // minute like a real one, and catching up when the tab comes back into view.
   const clock = document.getElementById("clock");
-  const tick = () => { clock.textContent = new Date().toLocaleTimeString([], { hour: "numeric", minute: "2-digit" }); };
+  let timer;
+  const tick = () => {
+    const now = new Date();
+    clock.textContent = now.toLocaleTimeString([], { hour: "numeric", minute: "2-digit" });
+    clearTimeout(timer);
+    timer = setTimeout(tick, 60000 - (now.getSeconds() * 1000 + now.getMilliseconds()) + 50);
+  };
   tick();
-  setInterval(tick, 30000);
+  document.addEventListener("visibilitychange", () => { if (!document.hidden) tick(); });
 </script>
 </body>
 </html>
