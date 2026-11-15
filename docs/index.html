@@ -90,8 +90,10 @@
   .hero {
     position: relative;
     overflow: hidden;
-    padding: 72px 0 0;
+    padding: 72px 0 120px;
     background:
+      /* Fade the colour into the page so the hero has no hard bottom edge. */
+      linear-gradient(to bottom, transparent 55%, var(--fog) 100%),
       radial-gradient(1100px 520px at 88% -10%, color-mix(in srgb, var(--indigo) 38%, transparent), transparent 70%),
       radial-gradient(800px 480px at 100% 70%, color-mix(in srgb, var(--teal) 30%, transparent), transparent 70%),
       var(--fog);
@@ -116,7 +118,8 @@
     .dropdown { animation: drop 900ms cubic-bezier(.2, .8, .2, 1) 200ms both; }
     @keyframes drop {
       from { clip-path: inset(0 0 100% 0); transform: translateY(-8px); }
-      to { clip-path: inset(0 0 -60px 0); transform: none; }
+      /* Ends unclipped on the sides and bottom so the shadow shows in full. */
+      to { clip-path: inset(0 -120px -140px -120px); transform: none; }
     }
   }
 
